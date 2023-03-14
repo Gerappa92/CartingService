@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartingService.BusinessLogic", "CartingService.BusinessLogic\CartingService.BusinessLogic.csproj", "{0E693C79-5112-49D9-8AB5-961F836308AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartingService.BusinessLogic", "CartingService.BusinessLogic\CartingService.BusinessLogic.csproj", "{0E693C79-5112-49D9-8AB5-961F836308AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartingService.DataAccess", "CartingService.DataAccess\CartingService.DataAccess.csproj", "{F57E9FCF-AFB7-41F9-B368-C08ED13732AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0E693C79-5112-49D9-8AB5-961F836308AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E693C79-5112-49D9-8AB5-961F836308AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E693C79-5112-49D9-8AB5-961F836308AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F57E9FCF-AFB7-41F9-B368-C08ED13732AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F57E9FCF-AFB7-41F9-B368-C08ED13732AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F57E9FCF-AFB7-41F9-B368-C08ED13732AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F57E9FCF-AFB7-41F9-B368-C08ED13732AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
