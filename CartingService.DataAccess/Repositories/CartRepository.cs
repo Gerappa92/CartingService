@@ -1,4 +1,4 @@
-﻿using CartingService.BusinessLogic.Models;
+﻿using CartingService.DataAccess.Entities;
 using LiteDB;
 
 namespace CartingService.DataAccess.Repositories;
@@ -30,7 +30,7 @@ public class CartRepository : ICartRepository
 
         var cart = collection.FindById(cartId);
         cart.Items.ToList().Add(item);
-        collection.Update(cartId, cart);
+        collection.Upsert(cartId, cart);
     }
 
     public void RemoveItem(Guid cartId, Guid itemId)

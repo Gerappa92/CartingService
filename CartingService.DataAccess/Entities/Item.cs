@@ -1,6 +1,6 @@
 ﻿using CartingService.DataAccess.ValueObjects;
 
-namespace CartingService.BusinessLogic.Models;
+namespace CartingService.DataAccess.Entities;
 
 public class Item
 {
