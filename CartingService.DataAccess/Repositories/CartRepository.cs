@@ -1,14 +1,8 @@
 ﻿using CartingService.DataAccess.Entities;
+using CartingService.DataAccess.Repositories;
 using LiteDB;
 
 namespace CartingService.DataAccess.Repositories;
-
-public interface ICartRepository
-{
-    IEnumerable<Item> ListItems(Guid cartId);
-    void AddItem(Guid cartId, Item item);
-    void RemoveItem(Guid cartId, Guid itemId);
-}
 
 public class CartRepository : ICartRepository
 {
@@ -16,6 +10,7 @@ public class CartRepository : ICartRepository
 
     public IEnumerable<Item> ListItems(Guid cartId)
     {
+        // TODO: rid of hardcoded path
         using var db = new LiteDatabase(@"C:\Temp\MyData.db");
         var collection = db.GetCollection<Cart>(CollectionName);
 
@@ -33,7 +28,7 @@ public class CartRepository : ICartRepository
         collection.Upsert(cartId, cart);
     }
 
-    public void RemoveItem(Guid cartId, Guid itemId)
+    public void RemoveItem(Guid cartId, int itemId)
     {
         using var db = new LiteDatabase(@"C:\Temp\MyData.db");
         var collection = db.GetCollection<Cart>(CollectionName);
