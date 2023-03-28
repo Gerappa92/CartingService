@@ -3,18 +3,18 @@ using MediatR;
 
 namespace CartingService.BusinessLogic.Handlers;
 
-public record RemoveCartItemCommand(Guid CartId, Guid ItemId) : IRequest;
+public record DeleteCartItemCommand(Guid CartId, int ItemId) : IRequest;
 
-public class RemoveCartItemHandler : IRequestHandler<RemoveCartItemCommand>
+public class DeleteCartItemHandler : IRequestHandler<DeleteCartItemCommand>
 {
     private readonly ICartRepository _cartRepository;
 
-    public RemoveCartItemHandler(ICartRepository cartRepository)
+    public DeleteCartItemHandler(ICartRepository cartRepository)
     {
         _cartRepository = cartRepository;
     }
 
-    public Task Handle(RemoveCartItemCommand request, CancellationToken cancellationToken)
+    public Task Handle(DeleteCartItemCommand request, CancellationToken cancellationToken)
     {
         _cartRepository.RemoveItem(request.CartId, request.ItemId);
         return Unit.Task;
