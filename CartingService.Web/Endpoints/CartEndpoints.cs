@@ -1,5 +1,7 @@
 ﻿using CartingService.BusinessLogic.Handlers;
 using CartingService.BusinessLogic.Models;
+using CartingService.Web.Extensions;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +9,10 @@ namespace CartingService.Web.Endpoints;
 
 public static class CartEndpoints
 {
+
+    // TODO: Add OpenAPI documentation
+    // TODO: Extensibility (via Version)
+    // TODO: Testability
     public static void RegisterCartEndpoints(this WebApplication app)
     {
         var cartGroup = app.MapGroup("api/v1.0/cart");
@@ -27,6 +33,10 @@ public static class CartEndpoints
     {
         var query = new ListCartItemsQuery(cartId);
         var items = await mediator.Send(query);
+        if (items is null)
+        {
+            return Results.NotFound();
+        }
         var result = new GetCartInfoResult(cartId, items);
         return Results.Ok(result);
     }
@@ -35,9 +45,14 @@ public static class CartEndpoints
         [FromBody] AddCartItemCommand command,
         [FromServices] IMediator mediator)
     {
-        await mediator.Send(command);
-        // TODO: Check validation
-        // TODO: Check if created
+        try
+        {
+            await mediator.Send(command);
+        }
+        catch (ValidationException e)
+        {
+            return Results.ValidationProblem(e.ToDictionary());
+        }
         return Results.Ok();
     }
 
@@ -47,9 +62,9 @@ public static class CartEndpoints
         [FromServices] IMediator mediator)
     {
         var command = new DeleteCartItemCommand(cartId, itemId);
-        await mediator.Send(command);
-        // TODO: check if deleted
-        return Results.Ok();
+        var isDeleted = await mediator.Send(command);
+
+        return isDeleted ? Results.Ok() : Results.NotFound();
     }
 
 }

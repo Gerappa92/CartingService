@@ -19,6 +19,6 @@ public class ListCartItemsHandler : IRequestHandler<ListCartItemsQuery, IEnumera
     public Task<IEnumerable<Item>> Handle(ListCartItemsQuery request, CancellationToken cancellationToken)
     {
         var items = _cartRepository.ListItems(request.CartId);
-        return Task.FromResult(items.Map());
+        return Task.FromResult(items?.Map());
     }
 }

@@ -18,7 +18,7 @@ public class CartRepository : BaseRepository, ICartRepository
         var collection = db.GetCollection<Cart>(CollectionName);
 
         var cart = collection.FindById(cartId);
-        return cart.Items.ToArray();
+        return cart?.Items.ToArray();
     }
 
     public void AddItem(Guid cartId, Item item)
@@ -32,13 +32,18 @@ public class CartRepository : BaseRepository, ICartRepository
         collection.Upsert(cartId, cart);
     }
 
-    public void RemoveItem(Guid cartId, int itemId)
+    public bool RemoveItem(Guid cartId, int itemId)
     {
         using var db = GetDatabase();
         var collection = db.GetCollection<Cart>(CollectionName);
 
         var cart = collection.FindById(cartId);
+        if (cart is null || cart.Items.All(x => x.Id != itemId))
+        {
+            return false;
+        }
+
         cart.Items = cart.Items.Where(x => x.Id != itemId);
-        collection.Update(cartId, cart);
+        return collection.Update(cartId, cart);
     }
 }
