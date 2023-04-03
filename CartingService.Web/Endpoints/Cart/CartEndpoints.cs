@@ -1,33 +1,20 @@
 ﻿using CartingService.BusinessLogic.Handlers;
-using CartingService.BusinessLogic.Models;
 using CartingService.Web.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CartingService.Web.Endpoints;
+namespace CartingService.Web.Endpoints.Cart;
 
-public static class CartEndpoints
+public class CartEndpoints
 {
-
-    // TODO: Add OpenAPI documentation
-    // TODO: Extensibility (via Version)
-    // TODO: Testability
-    public static void RegisterCartEndpoints(this WebApplication app)
-    {
-        var cartGroup = app.MapGroup("api/v1.0/cart");
-        cartGroup.MapGet("{cartId:guid}", GetCartInfo)
-            .WithName(nameof(GetCartInfo))
-            .WithOpenApi();
-        cartGroup.MapPost(string.Empty, AddItemToCart)
-            .WithName(nameof(AddItemToCart))
-            .WithOpenApi();
-        cartGroup.MapDelete("{cartId:guid}/items/{itemId:int}", DeleteItemFromCart)
-            .WithName(nameof(DeleteItemFromCart))
-            .WithOpenApi();
-    }
-
-    private static async Task<IResult> GetCartInfo(
+    /// <summary>
+    /// Gets the cart info.
+    /// </summary>
+    /// <param name="cartId">The cart identifier.</param>
+    /// <param name="mediator">The mediator.</param>
+    /// <returns></returns>
+    public async Task<IResult> GetCartInfo(
         [FromRoute] Guid cartId,
         [FromServices] IMediator mediator)
     {
@@ -41,7 +28,13 @@ public static class CartEndpoints
         return Results.Ok(result);
     }
 
-    private static async Task<IResult> AddItemToCart(
+    /// <summary>
+    /// Adds the item to cart.
+    /// </summary>
+    /// <param name="command">The command.</param>
+    /// <param name="mediator">The mediator.</param>
+    /// <returns></returns>
+    public async Task<IResult> AddItemToCart(
         [FromBody] AddCartItemCommand command,
         [FromServices] IMediator mediator)
     {
@@ -56,7 +49,15 @@ public static class CartEndpoints
         return Results.Ok();
     }
 
-    private static async Task<IResult> DeleteItemFromCart(
+
+    /// <summary>
+    /// Deletes the item from cart.
+    /// </summary>
+    /// <param name="cartId">The cart identifier.</param>
+    /// <param name="itemId">The item identifier.</param>
+    /// <param name="mediator">The mediator.</param>
+    /// <returns></returns>
+    public async Task<IResult> DeleteItemFromCart(
         [FromRoute] Guid cartId,
         [FromRoute] int itemId,
         [FromServices] IMediator mediator)
@@ -66,7 +67,4 @@ public static class CartEndpoints
 
         return isDeleted ? Results.Ok() : Results.NotFound();
     }
-
 }
-
-internal record GetCartInfoResult(Guid CartId, IEnumerable<Item> Items);
