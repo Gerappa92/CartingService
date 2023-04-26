@@ -21,6 +21,26 @@ public class CartRepository : BaseRepository, ICartRepository
         return cart?.Items.ToArray();
     }
 
+    public int UpdateItem(int id, string name, decimal price)
+    {
+        using var db = GetDatabase();
+        var collection = db.GetCollection<Cart>(CollectionName);
+
+        var carts = collection.Find(p => p.Items.Select(i=> i.Id).Any(i => i == id)).ToArray();
+
+        foreach (var cart in carts)
+        {
+            foreach (var cartItem in cart.Items.Where(i => i.Id == id))
+            {
+                cartItem.Name = name;
+                cartItem.Price = price;
+            }
+            collection.Update(cart.Id, cart);
+        }
+
+        return carts.Count();
+    }
+
     public void AddItem(Guid cartId, Item item)
     {
         using var db = GetDatabase();
