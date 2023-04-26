@@ -1,40 +1,49 @@
 ﻿using CartingService.DataAccess.Entities;
-using CartingService.DataAccess.Repositories;
-using LiteDB;
+using CartingService.DataAccess.Options;
+using Microsoft.Extensions.Options;
 
 namespace CartingService.DataAccess.Repositories;
 
-public class CartRepository : ICartRepository
+public class CartRepository : BaseRepository, ICartRepository
 {
     private const string CollectionName = "Carts";
 
+    public CartRepository(IOptions<DataAccessOptions> options) : base(options)
+    {
+    }
+
     public IEnumerable<Item> ListItems(Guid cartId)
     {
-        // TODO: rid of hardcoded path
-        using var db = new LiteDatabase(@"C:\Temp\MyData.db");
+        using var db = GetDatabase();
         var collection = db.GetCollection<Cart>(CollectionName);
 
         var cart = collection.FindById(cartId);
-        return cart.Items.ToArray();
+        return cart?.Items.ToArray();
     }
 
     public void AddItem(Guid cartId, Item item)
     {
-        using var db = new LiteDatabase(@"C:\Temp\MyData.db");
+        using var db = GetDatabase();
         var collection = db.GetCollection<Cart>(CollectionName);
 
-        var cart = collection.FindById(cartId);
-        cart.Items.ToList().Add(item);
+        var cart = collection.FindById(cartId) ?? new Cart { Id = cartId };
+        cart.Items = cart.Items.Append(item);
+
         collection.Upsert(cartId, cart);
     }
 
-    public void RemoveItem(Guid cartId, int itemId)
+    public bool RemoveItem(Guid cartId, int itemId)
     {
-        using var db = new LiteDatabase(@"C:\Temp\MyData.db");
+        using var db = GetDatabase();
         var collection = db.GetCollection<Cart>(CollectionName);
 
         var cart = collection.FindById(cartId);
+        if (cart is null || cart.Items.All(x => x.Id != itemId))
+        {
+            return false;
+        }
+
         cart.Items = cart.Items.Where(x => x.Id != itemId);
-        collection.Update(cartId, cart);
+        return collection.Update(cartId, cart);
     }
 }
