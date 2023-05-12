@@ -1,3 +1,3 @@
 ﻿namespace CartingService.BusinessLogic.Models;
 
-public record Image(Uri Url, string AltText);
+public record ImageDto(Uri Url, string AltText);

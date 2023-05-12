@@ -29,7 +29,7 @@ public class CartEndpoints
     }
 
     /// <summary>
-    /// Adds the item to cart.
+    /// Adds the itemDto to cart.
     /// </summary>
     /// <param name="command">The command.</param>
     /// <param name="mediator">The mediator.</param>
@@ -51,10 +51,10 @@ public class CartEndpoints
 
 
     /// <summary>
-    /// Deletes the item from cart.
+    /// Deletes the itemDto from cart.
     /// </summary>
     /// <param name="cartId">The cart identifier.</param>
-    /// <param name="itemId">The item identifier.</param>
+    /// <param name="itemId">The itemDto identifier.</param>
     /// <param name="mediator">The mediator.</param>
     /// <returns></returns>
     public async Task<IResult> DeleteItemFromCart(

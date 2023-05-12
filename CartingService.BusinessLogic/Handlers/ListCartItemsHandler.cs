@@ -5,9 +5,9 @@ using MediatR;
 
 namespace CartingService.BusinessLogic.Handlers;
 
-public record ListCartItemsQuery(Guid CartId) : IRequest<IEnumerable<Item>>;
+public record ListCartItemsQuery(Guid CartId) : IRequest<IEnumerable<ItemDto>>;
 
-public class ListCartItemsHandler : IRequestHandler<ListCartItemsQuery, IEnumerable<Item>>
+public class ListCartItemsHandler : IRequestHandler<ListCartItemsQuery, IEnumerable<ItemDto>>
 {
     private readonly ICartRepository _cartRepository;
 
@@ -16,7 +16,7 @@ public class ListCartItemsHandler : IRequestHandler<ListCartItemsQuery, IEnumera
         _cartRepository = cartRepository;
     }
 
-    public Task<IEnumerable<Item>> Handle(ListCartItemsQuery request, CancellationToken cancellationToken)
+    public Task<IEnumerable<ItemDto>> Handle(ListCartItemsQuery request, CancellationToken cancellationToken)
     {
         var items = _cartRepository.ListItems(request.CartId);
         return Task.FromResult(items?.Map());

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace CartingService.BusinessLogic.Validators;
 
-public class ItemValidator : AbstractValidator<Item>
+public class ItemValidator : AbstractValidator<ItemDto>
 {
     public ItemValidator()
     {
