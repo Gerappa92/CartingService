@@ -9,7 +9,7 @@ public static class CartMappings
         {
             Id = item.Id,
             Name = item.Name,
-            Image = item.Image.Map(),
+            Image = item.Image?.Map(),
             Price = item.Price,
             Quantity = item.Quantity
         };
@@ -29,7 +29,7 @@ public static class CartMappings
         {
             Id = item.Id,
             Name = item.Name,
-            Image = item.Image.Map(),
+            Image = item.Image?.Map(),
             Price = item.Price,
             Quantity = item.Quantity
         };

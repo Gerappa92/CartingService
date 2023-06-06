@@ -1,7 +1,10 @@
 using System.Reflection;
 using CartingService.BusinessLogic;
 using CartingService.DataAccess;
+using CartingService.Web.BackgroundServices;
 using CartingService.Web.Endpoints.Cart;
+using CartingService.Web.Options;
+using CartingService.Web.Platform;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,10 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddBusinessLogic();
 builder.Services.AddDataAccess(builder.Configuration);
+
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection(RabbitMqOptions.Position));
+builder.Services.AddSingleton<RabbitMqFactory>();
+builder.Services.AddHostedService<ItemUpdateBackgroundService>();
 
 var app = builder.Build();
 
