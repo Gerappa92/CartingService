@@ -20,19 +20,20 @@ builder.Services.AddBusinessLogic();
 builder.Services.AddDataAccess(builder.Configuration);
 
 builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection(RabbitMqOptions.Position));
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddSingleton<RabbitMqFactory>();
 builder.Services.AddHostedService<ItemUpdateBackgroundService>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (builder.Configuration.GetValue<bool>("Documentation:Swagger"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.RegisterCartEndpoints();
 

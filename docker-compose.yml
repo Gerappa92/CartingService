@@ -1,0 +1,19 @@
+services:
+  web:
+    build: .
+    ports: 
+      - 5000:80
+    environment:
+      - RabbitMq__HostName=rabbitmq
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+    volumes:
+      - carting-service-database:/app/Database
+  rabbitmq:
+    build: ./RabbitMq/.
+    ports: 
+      - 5672:5672
+      - 15672:15672
+volumes:
+  carting-service-database:
