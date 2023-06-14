@@ -6,6 +6,7 @@ using CartingService.Web.Platform;
 using MediatR;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 
 namespace CartingService.Web.BackgroundServices;
 
@@ -24,11 +25,13 @@ public class ItemUpdateBackgroundService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("ItemUpdateBackgroundService is starting.");
+        await Task.Delay(TimeSpan.FromSeconds(20));
 
+        _logger.LogInformation("ItemUpdateBackgroundService is starting. Trying connect to hostname: {}", _connectionFactory.HostName);
         using var connection = _connectionFactory.CreateConnection();
         using var channel = connection.CreateModel();
         var consumer = new EventingBasicConsumer(channel);
+        _logger.LogInformation("Connected to hostname: {}", _connectionFactory.HostName);
 
         consumer.Received += (_, ea) =>
         {
@@ -53,10 +56,10 @@ public class ItemUpdateBackgroundService : BackgroundService
             consumer: consumer);
 
         _logger.LogInformation("ItemUpdateBackgroundService is running.");
+
         while (!stoppingToken.IsCancellationRequested)
         {
             await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
-
         }
     }
 }
